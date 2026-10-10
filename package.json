@@ -1,0 +1,9 @@
+{
+  "name": "ninya-box",
+  "version": "1.0.0",
+  "private": true,
+  "description": "3.8cm cube box net customizer",
+  "scripts": {
+    "start": "npx --yes serve -l 5173"
+  }
+}

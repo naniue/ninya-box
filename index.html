@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>忍喵小盒子 · 3.8cm 纸盒展开图</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+XiaoWei&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23c23a2b'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='32' fill='white'%3E喵%3C/text%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <header class="hero">
+        <div class="brand">
+          <svg class="logo" viewBox="0 0 72 72" aria-hidden="true">
+            <rect x="8" y="18" width="56" height="42" rx="10" fill="#1c1916" />
+            <rect x="14" y="24" width="44" height="30" rx="8" fill="#f4efe6" />
+            <path d="M18 18c4-10 12-12 18-4 6-8 14-6 18 4" fill="#1c1916" />
+            <circle cx="28" cy="38" r="3.2" fill="#1c1916" />
+            <circle cx="44" cy="38" r="3.2" fill="#1c1916" />
+            <path d="M32 44h8" stroke="#c23a2b" stroke-width="3" stroke-linecap="round" />
+            <path d="M10 34h-6M68 34h-6" stroke="#c23a2b" stroke-width="4" stroke-linecap="round" />
+          </svg>
+          <div>
+            <h1>忍喵小盒子</h1>
+            <p>上传五个面的图案，导出可折叠的 3.8cm 正方体纸盒展开图</p>
+          </div>
+        </div>
+        <div class="badge">成品边长 <strong>3.8 cm</strong> · 导出 <strong>A4</strong></div>
+      </header>
+
+      <main class="layout">
+        <aside class="panel panel-pad">
+          <h2>五个面</h2>
+          <div class="face-list" id="face-list"></div>
+          <div class="window-edges is-off" id="window-edges">
+            <div class="edge-title">开窗四边（毫米，距该侧边缘）</div>
+            <div class="edge-grid">
+              <label>上<input class="scale-num" data-edge="top" type="number" min="0.2" max="18" step="0.1" value="3" /></label>
+              <label>下<input class="scale-num" data-edge="bottom" type="number" min="0.2" max="18" step="0.1" value="3" /></label>
+              <label>左<input class="scale-num" data-edge="left" type="number" min="0.2" max="30" step="0.1" value="3" /></label>
+              <label>右<input class="scale-num" data-edge="right" type="number" min="0.2" max="30" step="0.1" value="3" /></label>
+            </div>
+            <p class="note">数字为距该侧边缘的毫米数，可精确调整每条开窗边。</p>
+          </div>
+          <button class="btn btn-ghost" id="btn-demo" type="button" style="width: 100%; margin-top: 12px">
+            填入示例图案
+          </button>
+          <p class="note">
+            五个面都可以勾选巡边开窗。相邻侧面会连成一条窗，盒盖单独开窗。四边距对所有开窗共用。点「截」可截取屏幕，框选后自动传到该面。
+          </p>
+        </aside>
+
+        <section class="panel preview-wrap">
+          <div class="preview-head">
+            <h2>预览</h2>
+            <div class="tabs">
+              <button id="tab-net" class="active" type="button">展开图</button>
+              <button id="tab-cube" type="button">立体预览</button>
+            </div>
+          </div>
+
+          <div class="stage" id="net-stage">
+            <svg id="net-svg" viewBox="0 0 210 297" role="img" aria-label="纸盒展开图预览"></svg>
+          </div>
+          <div class="stage cube-stage hidden" id="cube-stage">
+            <div class="cube" id="cube">
+              <div class="side front" data-side="front">前</div>
+              <div class="side back" data-side="back">后</div>
+              <div class="side left" data-side="left">左</div>
+              <div class="side right" data-side="right">右</div>
+              <div class="side top" data-side="top">上</div>
+              <div class="side bottom" data-side="bottom"></div>
+            </div>
+          </div>
+
+          <div class="export-bar">
+            <label class="copies-row">
+              本页印
+              <input class="scale-num" id="copies-input" type="number" min="1" step="1" value="2" />
+              个
+            </label>
+            <button class="btn btn-primary" id="btn-pdf" type="button">导出 A4 PNG</button>
+            <button class="btn btn-ghost" id="btn-print" type="button">打印</button>
+            <div class="legend">
+              <span><i></i>裁切 / 开窗</span>
+            </div>
+          </div>
+          <p class="note" id="copies-hint">
+            导出可自选文件名和保存位置。平面图只有图案、无裁切边框；刀版图为白底裁切线。一张 A4 按 3.8cm 真实尺寸最多可放 <strong id="copies-max">2</strong> 个。打印请选「实际大小 / 100%」。
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <div class="export-mask" id="export-mask" hidden>
+      <div class="export-dialog" role="dialog" aria-labelledby="export-title">
+        <h3 id="export-title">导出 A4 PNG</h3>
+        <label class="export-field">
+          平面图文件名
+          <input id="export-art-name" type="text" spellcheck="false" value="忍喵小盒子-3.8cm-展开图.png" />
+        </label>
+        <label class="export-field">
+          刀版图文件名
+          <input id="export-die-name" type="text" spellcheck="false" value="忍喵小盒子-3.8cm-刀版图.png" />
+        </label>
+        <p class="note">接下来会弹出系统保存框，可改文件名并选择文件夹。若浏览器不支持选文件夹，将保存到默认下载目录。</p>
+        <div class="export-actions">
+          <button class="btn btn-ghost" id="export-cancel" type="button">取消</button>
+          <button class="btn btn-primary" id="export-confirm" type="button">开始导出</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shot-mask" id="shot-mask" hidden>
+      <div class="shot-toolbar">
+        <p id="shot-hint">拖拽框选区域，松开后自动上传。Esc 取消。</p>
+        <div class="shot-actions">
+          <button class="btn btn-ghost" id="shot-full" type="button">使用整张</button>
+          <button class="btn btn-ghost" id="shot-cancel" type="button">取消</button>
+        </div>
+      </div>
+      <div class="shot-stage" id="shot-stage">
+        <canvas id="shot-canvas"></canvas>
+        <div class="shot-rect" id="shot-rect" hidden></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
